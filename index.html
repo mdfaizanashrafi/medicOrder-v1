@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedicOrder — The Operating System for Medicine Distribution</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #182825;
+            --secondary: #016FB9;
+            --accent: #22AED1;
+            --muted: #6D8EA0;
+            --neutral: #AFA98D;
+            --bg: #F8FAFC;
+            --surface: #FFFFFF;
+            --text: #182825;
+            --text-light: #6D8EA0;
+            --border: rgba(109, 142, 160, 0.18);
+            --shadow: 0 12px 30px rgba(24, 40, 37, 0.08);
+            --gradient: linear-gradient(135deg, #182825 0%, #016FB9 55%, #22AED1 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(24, 40, 37, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(109, 142, 160, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+            font-family: 'Sora', sans-serif;
+        }
+
+        .logo-text {
+            color: white;
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 22px;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .nav-cta {
+            background: var(--secondary);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-cta:hover {
+            background: #015e9d;
+            transform: translateY(-2px);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            padding: 120px 24px 80px;
+        }
+
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(34, 174, 209, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(34, 174, 209, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(34, 174, 209, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            top: 10%;
+            right: 10%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero-glow-2 {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(1, 111, 185, 0.25) 0%, transparent 70%);
+            border-radius: 50%;
+            bottom: 10%;
+            left: 5%;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-30px); }
+        }
+
+        .hero-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            width: 100%;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 100px;
+            color: white;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 32px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            font-size: clamp(40px, 5vw, 64px);
+            color: white;
+            margin-bottom: 24px;
+            letter-spacing: -1.5px;
+        }
+
+        .hero h1 span {
+            color: var(--accent);
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 520px;
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: #015e9d;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(1, 111, 185, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+            height: 500px;
+        }
+
+        .dashboard-card {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-card.main {
+            width: 100%;
+            max-width: 480px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-family: 'Sora', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--primary);
+        }
+
+        .status-badge {
+            background: rgba(34, 174, 209, 0.12);
+            color: var(--secondary);
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .order-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: var(--bg);
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+
+        .order-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .order-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(1, 111, 185, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            font-size: 16px;
+        }
+
+        .order-name {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--primary);
+        }
+
+        .order-meta {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .order-status {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .floating-card {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 12px 30px rgba(24, 40, 37, 0.15);
+            animation: float-card 5s ease-in-out infinite;
+        }
+
+        .floating-card.card-1 {
+            top: 5%;
+            right: -5%;
+            animation-delay: 0s;
+        }
+
+        .floating-card.card-2 {
+            bottom: 10%;
+            left: -10%;
+            animation-delay: 2s;
+        }
+
+        @keyframes float-card {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .stat-value {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        /* Network Lines */
+        .network-node {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(34, 174, 209, 0.5);
+        }
+
+        .network-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0.4;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 100px 24px;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 640px;
+            margin: 0 auto 64px;
+        }
+
+        .section-label {
+            display: inline-block;
+            background: rgba(34, 174, 209, 0.12);
+            color: var(--secondary);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: clamp(28px, 3.5vw, 42px);
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+            font-size: 17px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            background: var(--primary);
+            padding: 100px 24px;
+        }
+
+        .problem-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .problem-section .section-title {
+            color: white;
+        }
+
+        .problem-section .section-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .problem-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-4px);
+        }
+
+        .problem-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(34, 174, 209, 0.15);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .problem-card h3 {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .problem-card p {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid rgba(109, 142, 160, 0.15);
+            box-shadow: var(--shadow);
+            border-radius: 24px;
+            padding: 40px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(24, 40, 37, 0.12);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, rgba(1, 111, 185, 0.1), rgba(34, 174, 209, 0.1));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            font-size: 24px;
+            margin-bottom: 24px;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* Value Prop Section */
+        .value-section {
+            background: linear-gradient(180deg, var(--bg) 0%, rgba(175, 169, 141, 0.08) 100%);
+            padding: 100px 24px;
+        }
+
+        .value-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+        }
+
+        .value-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 48px;
+            box-shadow: var(--shadow);
+        }
+
+        .value-card h3 {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .value-list {
+            list-style: none;
+        }
+
+        .value-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .value-list li:last-child {
+            border-bottom: none;
+        }
+
+        .check-icon {
+            width: 24px;
+            height: 24px;
+            background: rgba(34, 174, 209, 0.12);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 14px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* How It Works */
+        .steps {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 260px;
+            max-width: 320px;
+            text-align: center;
+            padding: 40px 24px;
+            position: relative;
+        }
+
+        .step-number {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 22px;
+            margin: 0 auto 24px;
+            box-shadow: 0 8px 25px rgba(1, 111, 185, 0.3);
+        }
+
+        .step h3 {
+            font-size: 20px;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .step p {
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .step-connector {
+            position: absolute;
+            top: 65px;
+            right: -30px;
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            opacity: 0.3;
+        }
+
+        /* Waitlist Section */
+        .waitlist {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 100px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .waitlist::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(34, 174, 209, 0.15) 0%, transparent 50%);
+        }
+
+        .waitlist-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .waitlist h2 {
+            font-size: clamp(28px, 3.5vw, 42px);
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .waitlist p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 17px;
+            margin-bottom: 40px;
+        }
+
+        .waitlist-form {
+            display: flex;
+            gap: 12px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .waitlist-input {
+            flex: 1;
+            padding: 16px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .waitlist-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .waitlist-input:focus {
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .waitlist-btn {
+            background: var(--accent);
+            color: var(--primary);
+            padding: 16px 28px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .waitlist-btn:hover {
+            background: #1c9bb8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(34, 174, 209, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary);
+            padding: 80px 24px 40px;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 64px;
+        }
+
+        .footer-brand {
+            max-width: 320px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--gradient);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-family: 'Sora', sans-serif;
+        }
+
+        .footer-logo-text {
+            color: white;
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .footer-brand p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .footer-column h4 {
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 12px;
+        }
+
+        .footer-column a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-bottom p {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 13px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-social a {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .footer-social a:hover {
+            background: rgba(34, 174, 209, 0.2);
+            color: var(--accent);
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 72px;
+            left: 0;
+            right: 0;
+            background: var(--primary);
+            padding: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 999;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu a {
+            display: block;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 12px 0;
+            font-size: 16px;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .mobile-menu a:last-child {
+            border-bottom: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-subtitle {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-ctas {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .value-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .step-connector {
+                display: none;
+            }
+
+            .waitlist-form {
+                flex-direction: column;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--muted);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">M</div>
+                <span class="logo-text">MedicOrder</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+            </ul>
+            <a href="#waitlist" class="nav-cta">Join Waitlist</a>
+            <button class="mobile-menu-btn" onclick="toggleMenu()">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#problem" onclick="toggleMenu()">Problem</a>
+        <a href="#features" onclick="toggleMenu()">Features</a>
+        <a href="#solution" onclick="toggleMenu()">Solution</a>
+        <a href="#how-it-works" onclick="toggleMenu()">How It Works</a>
+        <a href="#waitlist" onclick="toggleMenu()">Join Waitlist</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-grid"></div>
+        <div class="hero-glow"></div>
+        <div class="hero-glow-2"></div>
+        
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="dot"></span>
+                    Now in Private Beta
+                </div>
+                <h1>The Operating System for <span>Medicine Distribution</span></h1>
+                <p class="hero-subtitle">
+                    Digitize and automate pharmaceutical wholesale logistics. Connect pharmacies, stockists, and distributors through a unified procurement network that ensures medicines are always available where they are needed most.
+                </p>
+                <div class="hero-ctas">
+                    <a href="#waitlist" class="btn-primary">
+                        Join the Waitlist
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <a href="#features" class="btn-secondary">
+                        Explore Features
+                    </a>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="dashboard-card main">
+                    <div class="card-header">
+                        <span class="card-title">Live Order Routing</span>
+                        <span class="status-badge">Active</span>
+                    </div>
+                    <div class="order-row">
+                        <div class="order-info">
+                            <div class="order-icon">💊</div>
+                            <div>
+                                <div class="order-name">Amoxicillin 500mg</div>
+                                <div class="order-meta">Qty: 2,400 units • 4 suppliers</div>
+                            </div>
+                        </div>
+                        <span class="order-status">Routed</span>
+                    </div>
+                    <div class="order-row">
+                        <div class="order-info">
+                            <div class="order-icon">💉</div>
+                            <div>
+                                <div class="order-name">Insulin Glargine</div>
+                                <div class="order-meta">Qty: 800 units • 2 suppliers</div>
+                            </div>
+                        </div>
+                        <span class="order-status">Fulfilling</span>
+                    </div>
+                    <div class="order-row">
+                        <div class="order-info">
+                            <div class="order-icon">🧪</div>
+                            <div>
+                                <div class="order-name">Paracetamol 650mg</div>
+                                <div class="order-meta">Qty: 5,000 units • 6 suppliers</div>
+                            </div>
+                        </div>
+                        <span class="order-status">Delivered</span>
+                    </div>
+                    <div class="order-row">
+                        <div class="order-info">
+                            <div class="order-icon">📦</div>
+                            <div>
+                                <div class="order-name">Omeprazole 20mg</div>
+                                <div class="order-meta">Qty: 1,200 units • 3 suppliers</div>
+                            </div>
+                        </div>
+                        <span class="order-status">Routed</span>
+                    </div>
+                </div>
+                
+                <div class="floating-card card-1">
+                    <div class="stat-value">847</div>
+                    <div class="stat-label">Active Orders Today</div>
+                </div>
+                
+                <div class="floating-card card-2">
+                    <div class="stat-value">12.4k</div>
+                    <div class="stat-label">Medicines in Network</div>
+                </div>
+
+                <div class="network-node" style="top: 20%; left: 10%;"></div>
+                <div class="network-node" style="top: 60%; right: 5%;"></div>
+                <div class="network-node" style="bottom: 20%; left: 30%;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem-section" id="problem">
+        <div class="problem-container">
+            <div class="section-header fade-in">
+                <span class="section-label" style="background: rgba(255,255,255,0.1); color: var(--accent);">The Problem</span>
+                <h2 class="section-title">Pharmaceutical Wholesale Still Runs on Phone Calls & Spreadsheets</h2>
+                <p class="section-subtitle">The industry relies on manual processes that create inefficiencies, delays, and lost revenue across the entire supply chain.</p>
+            </div>
+            
+            <div class="problem-grid">
+                <div class="problem-card fade-in">
+                    <div class="problem-icon">📞</div>
+                    <h3>Manual Procurement</h3>
+                    <p>Pharmacies call multiple stockists to check medicine availability, wasting hours on phone calls and messages.</p>
+                </div>
+                <div class="problem-card fade-in">
+                    <div class="problem-icon">📋</div>
+                    <h3>Fragmented Records</h3>
+                    <p>Orders placed through WhatsApp, phone calls, or handwritten records are impossible to track and audit.</p>
+                </div>
+                <div class="problem-card fade-in">
+                    <div class="problem-icon">⚠️</div>
+                    <h3>Stock Visibility Gaps</h3>
+                    <p>Stock information becomes outdated quickly, causing critical medicines to go out of stock without warning.</p>
+                </div>
+                <div class="problem-card fade-in">
+                    <div class="problem-icon">💰</div>
+                    <h3>Lost Revenue</h3>
+                    <p>Delayed patient care, excess inventory, procurement errors, and poor supplier relationships cost millions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section" id="features">
+        <div class="section-header fade-in">
+            <span class="section-label">Core Platform</span>
+            <h2 class="section-title">Built for the Complexity of Pharmaceutical Logistics</h2>
+            <p class="section-subtitle">Every feature is designed to eliminate friction in the medicine procurement workflow — from discovery to delivery.</p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🧭</div>
+                <h3>Intelligent Order Routing</h3>
+                <p>When a pharmacy places an order, the system automatically checks supplier inventory, identifies available stockists, and routes orders intelligently based on availability and business rules.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">📊</div>
+                <h3>Real-Time Inventory</h3>
+                <p>Stockists update inventory levels instantly. Pharmacies always see the latest stock information with low-stock notifications and synchronized data across operations.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🛒</div>
+                <h3>Bulk Ordering System</h3>
+                <p>Designed specifically for wholesale procurement with multi-product carts, repeat order templates, saved procurement lists, and fast reorder workflows.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🌐</div>
+                <h3>Supplier Discovery</h3>
+                <p>Search medicines, discover nearby or preferred suppliers, compare availability, and build long-term supplier relationships from one dashboard.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🔒</div>
+                <h3>Secure Transaction Ledger</h3>
+                <p>Every transaction is recorded securely — order history, purchase invoices, delivery records, payment references, and full audit logs.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">📈</div>
+                <h3>Procurement Analytics</h3>
+                <p>Gain insights into top-selling medicines, supplier performance, procurement trends, inventory turnover, and revenue opportunities.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Proposition Section -->
+    <section class="value-section" id="solution">
+        <div class="value-container">
+            <div class="section-header fade-in">
+                <span class="section-label">Who It's For</span>
+                <h2 class="section-title">Built for Every Link in the Supply Chain</h2>
+                <p class="section-subtitle">MedicOrder creates value for every participant in the pharmaceutical ecosystem — from independent pharmacies to national distributors.</p>
+            </div>
+            
+            <div class="value-grid">
+                <div class="value-card fade-in">
+                    <h3>
+                        <span style="color: var(--accent);">🏥</span>
+                        For Pharmacies & Vendors
+                    </h3>
+                    <ul class="value-list">
+                        <li>
+                            <span class="check-icon">✓</span>
+                            Find medicine availability instantly across your supplier network
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            Place large wholesale orders from one unified dashboard
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            Reduce procurement time from hours to minutes
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            Maintain complete order history and avoid stock shortages
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            Gain access to multiple suppliers and improve operational efficiency
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="value-card fade-in">
+                    <h3>
+                        <span style="color: var(--secondary);">🏭</span>
+                        For Stockists & Distributors
+                    </h3>
+                    <ul class="value-list">
+                        <li>
+                            <span class="check-icon">✓</span>
+                            Receive structured purchase orders digitally — no more WhatsApp chaos
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            Manage inventory efficiently with real-time synchronization
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            Increase order visibility and expand business reach
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            Analyze demand patterns and reduce manual order management
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            Improve customer retention with proactive inventory alerts
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section" id="how-it-works">
+        <div class="section-header fade-in">
+            <span class="section-label">Simple Workflow</span>
+            <h2 class="section-title">From Search to Delivery in Four Steps</h2>
+            <p class="section-subtitle">MedicOrder replaces fragmented manual processes with a seamless digital workflow that keeps every stakeholder connected.</p>
+        </div>
+        
+        <div class="steps">
+            <div class="step fade-in">
+                <div class="step-number">1</div>
+                <div class="step-connector"></div>
+                <h3>Search & Discover</h3>
+                <p>Pharmacies search for medicines and instantly discover available stock across the connected supplier network.</p>
+            </div>
+            <div class="step fade-in">
+                <div class="step-number">2</div>
+                <div class="step-connector"></div>
+                <h3>Place Bulk Orders</h3>
+                <p>Add medicines to cart, apply wholesale quantities, and submit structured orders directly to verified suppliers.</p>
+            </div>
+            <div class="step fade-in">
+                <div class="step-number">3</div>
+                <div class="step-connector"></div>
+                <h3>Smart Routing</h3>
+                <p>The platform intelligently routes orders to the best available suppliers based on inventory, proximity, and business rules.</p>
+            </div>
+            <div class="step fade-in">
+                <div class="step-number">4</div>
+                <h3>Track & Fulfill</h3>
+                <p>Monitor order status in real time, receive delivery confirmations, and maintain complete transaction records.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Section -->
+    <section class="section" style="background: linear-gradient(180deg, rgba(175,169,141,0.05) 0%, var(--bg) 100%);">
+        <div class="section-header fade-in">
+            <span class="section-label">Security & Compliance</span>
+            <h2 class="section-title">Enterprise-Grade Security for Healthcare Data</h2>
+            <p class="section-subtitle">Built with the same rigor as financial infrastructure — because pharmaceutical supply chains demand nothing less.</p>
+        </div>
+        
+        <div class="features-grid" style="max-width: 900px; margin: 0 auto;">
+            <div class="feature-card fade-in" style="text-align: center;">
+                <div class="feature-icon" style="margin: 0 auto 24px;">🔐</div>
+                <h3>Role-Based Access</h3>
+                <p>Granular permissions ensure users only access data relevant to their role — pharmacy owners, stockists, distributors, and admins.</p>
+            </div>
+            <div class="feature-card fade-in" style="text-align: center;">
+                <div class="feature-icon" style="margin: 0 auto 24px;">📜</div>
+                <h3>Audit Logs</h3>
+                <p>Every action is logged immutably. Full traceability for compliance, dispute resolution, and operational transparency.</p>
+            </div>
+            <div class="feature-card fade-in" style="text-align: center;">
+                <div class="feature-icon" style="margin: 0 auto 24px;">✅</div>
+                <h3>Business Verification</h3>
+                <p>All suppliers and pharmacies are verified before platform access, ensuring a trusted network of legitimate participants.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Waitlist Section -->
+    <section class="waitlist" id="waitlist">
+        <div class="waitlist-container">
+            <h2>Join the Future of Medicine Procurement</h2>
+            <p>Be among the first to transform how your business sources and distributes medicines. Early access members receive priority onboarding and lifetime pricing benefits.</p>
+            <form class="waitlist-form" onsubmit="handleWaitlist(event)">
+                <input type="email" class="waitlist-input" placeholder="Enter your business email" required>
+                <button type="submit" class="waitlist-btn">Get Early Access</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="footer-logo-icon">M</div>
+                        <span class="footer-logo-text">MedicOrder</span>
+                    </div>
+                    <p>The digital backbone of pharmaceutical wholesale procurement. Making medicine sourcing faster, smarter, and more reliable.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#solution">Solutions</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#">Pricing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Security</a></li>
+                        <li><a href="#">Compliance</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 MedicOrder. All rights reserved.</p>
+                <div class="footer-social">
+                    <a href="#">𝕏</a>
+                    <a href="#">in</a>
+                    <a href="#">📧</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+
+        // Close mobile menu on resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                document.getElementById('mobileMenu').classList.remove('active');
+            }
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Navbar scroll effect
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
+            } else {
+                navbar.style.boxShadow = 'none';
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Waitlist form handler
+        function handleWaitlist(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('.waitlist-btn');
+            const originalText = btn.textContent;
+            btn.textContent = '✓ Added to Waitlist';
+            btn.style.background = '#1c9bb8';
+            
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '';
+                e.target.reset();
+            }, 3000);
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
