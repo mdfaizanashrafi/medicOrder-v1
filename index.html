@@ -9,24 +9,33 @@
     <!-- Apple Touch Icon (iPhone/iPad home screen icon) -->
     <link rel="apple-touch-icon" href="assets/logo.png">
     <!-- Theme color (browser address bar color on mobile) -->
-    <meta name="theme-color" content="#182825">
+    <meta name="theme-color" content="#071e22">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #182825;
-            --secondary: #016FB9;
-            --accent: #22AED1;
-            --muted: #6D8EA0;
-            --neutral: #AFA98D;
-            --bg: #F8FAFC;
-            --surface: #FFFFFF;
-            --text: #182825;
-            --text-light: #6D8EA0;
-            --border: rgba(109, 142, 160, 0.18);
-            --shadow: 0 12px 30px rgba(24, 40, 37, 0.08);
-            --gradient: linear-gradient(135deg, #182825 0%, #016FB9 55%, #22AED1 100%);
+            --primary: #071e22;   /* very dark teal */
+            --secondary: #1d7874; /* teal */
+            --accent: #ee2e31;    /* red accent */
+            --muted: #679289;     /* muted green-blue */
+            --neutral: #f4c095;   /* peach */
+
+            --bg: #f8fafc;
+            --surface: #ffffff;
+
+            --text: #071e22;
+            --text-light: #679289;
+
+            --border: rgba(103, 146, 137, 0.18);
+            --shadow: 0 12px 30px rgba(7, 30, 34, 0.08);
+
+            --gradient: linear-gradient(
+                135deg,
+                #071e22 0%,
+                #1d7874 55%,
+                #ee2e31 100%
+            );
         }
 
         * {
@@ -60,9 +69,9 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            background: rgba(24, 40, 37, 0.95);
+            background: rgba(7, 30, 34, 0.95);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(109, 142, 160, 0.15);
+            border-bottom: 1px solid rgba(103, 146, 137, 0.15);
             transition: all 0.3s ease;
         }
 
@@ -173,8 +182,8 @@
             position: absolute;
             inset: 0;
             background-image: 
-                linear-gradient(rgba(34, 174, 209, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(34, 174, 209, 0.05) 1px, transparent 1px);
+                linear-gradient(rgba(29, 120, 116, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(29, 120, 116, 0.05) 1px, transparent 1px);
             background-size: 60px 60px;
             mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
         }
@@ -183,7 +192,7 @@
             position: absolute;
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle, rgba(34, 174, 209, 0.3) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(29, 120, 116, 0.3) 0%, transparent 70%);
             border-radius: 50%;
             top: 10%;
             right: 10%;
@@ -194,7 +203,7 @@
             position: absolute;
             width: 400px;
             height: 400px;
-            background: radial-gradient(circle, rgba(1, 111, 185, 0.25) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(29, 120, 116, 0.25) 0%, transparent 70%);
             border-radius: 50%;
             bottom: 10%;
             left: 5%;
@@ -290,7 +299,7 @@
         .btn-primary:hover {
             background: #015e9d;
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(1, 111, 185, 0.3);
+            box-shadow: 0 8px 25px rgba(29, 120, 116, 0.3);
         }
 
         .btn-secondary {
@@ -354,7 +363,7 @@
         }
 
         .status-badge {
-            background: rgba(34, 174, 209, 0.12);
+            background: rgba(29, 120, 116, 0.12);
             color: var(--secondary);
             padding: 4px 12px;
             border-radius: 100px;
@@ -381,7 +390,7 @@
         .order-icon {
             width: 36px;
             height: 36px;
-            background: rgba(1, 111, 185, 0.1);
+            background: rgba(29, 120, 116, 0.1);
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -412,7 +421,7 @@
             background: rgba(255, 255, 255, 0.95);
             border-radius: 16px;
             padding: 16px;
-            box-shadow: 0 12px 30px rgba(24, 40, 37, 0.15);
+            box-shadow: 0 12px 30px rgba(7, 30, 34, 0.15);
             animation: float-card 5s ease-in-out infinite;
         }
 
@@ -453,7 +462,7 @@
             height: 12px;
             background: var(--accent);
             border-radius: 50%;
-            box-shadow: 0 0 20px rgba(34, 174, 209, 0.5);
+            box-shadow: 0 0 20px rgba(29, 120, 116, 0.5);
         }
 
         .network-line {
@@ -478,7 +487,7 @@
 
         .section-label {
             display: inline-block;
-            background: rgba(34, 174, 209, 0.12);
+            background: rgba(29, 120, 116, 0.12);
             color: var(--secondary);
             padding: 6px 16px;
             border-radius: 100px;
@@ -541,7 +550,7 @@
         .problem-icon {
             width: 48px;
             height: 48px;
-            background: rgba(34, 174, 209, 0.15);
+            background: rgba(29, 120, 116, 0.15);
             border-radius: 14px;
             display: flex;
             align-items: center;
@@ -572,7 +581,7 @@
 
         .feature-card {
             background: var(--surface);
-            border: 1px solid rgba(109, 142, 160, 0.15);
+            border: 1px solid rgba(103, 146, 137, 0.15);
             box-shadow: var(--shadow);
             border-radius: 24px;
             padding: 40px;
@@ -595,7 +604,7 @@
 
         .feature-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 50px rgba(24, 40, 37, 0.12);
+            box-shadow: 0 20px 50px rgba(7, 30, 34, 0.12);
         }
 
         .feature-card:hover::before {
@@ -605,7 +614,7 @@
         .feature-icon {
             width: 56px;
             height: 56px;
-            background: linear-gradient(135deg, rgba(1, 111, 185, 0.1), rgba(34, 174, 209, 0.1));
+            background: linear-gradient(135deg, rgba(29, 120, 116, 0.1), rgba(29, 120, 116, 0.1));
             border-radius: 16px;
             display: flex;
             align-items: center;
@@ -683,7 +692,7 @@
         .check-icon {
             width: 24px;
             height: 24px;
-            background: rgba(34, 174, 209, 0.12);
+            background: rgba(29, 120, 116, 0.12);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -724,7 +733,7 @@
             font-weight: 700;
             font-size: 22px;
             margin: 0 auto 24px;
-            box-shadow: 0 8px 25px rgba(1, 111, 185, 0.3);
+            box-shadow: 0 8px 25px rgba(29, 120, 116, 0.3);
         }
 
         .step h3 {
@@ -761,7 +770,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at 20% 50%, rgba(34, 174, 209, 0.15) 0%, transparent 50%);
+            background: radial-gradient(circle at 20% 50%, rgba(29, 120, 116, 0.15) 0%, transparent 50%);
         }
 
         .waitlist-container {
@@ -828,7 +837,7 @@
         .waitlist-btn:hover {
             background: #1c9bb8;
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(34, 174, 209, 0.3);
+            box-shadow: 0 8px 25px rgba(29, 120, 116, 0.3);
         }
 
         /* Footer */
@@ -949,7 +958,7 @@
         }
 
         .footer-social a:hover {
-            background: rgba(34, 174, 209, 0.2);
+            background: rgba(29, 120, 116, 0.2);
             color: var(--accent);
         }
 
