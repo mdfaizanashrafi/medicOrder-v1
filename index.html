@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MedicOrder — The Operating System for Medicine Distribution</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+    <!-- Apple Touch Icon (iPhone/iPad home screen icon) -->
+    <link rel="apple-touch-icon" href="assets/logo.png">
+    <!-- Theme color (browser address bar color on mobile) -->
+    <meta name="theme-color" content="#182825">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -75,6 +81,13 @@
             align-items: center;
             gap: 12px;
             text-decoration: none;
+        }
+
+        .logo-icon-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            object-fit: cover;
         }
 
         .logo-icon {
@@ -1074,7 +1087,7 @@
     <nav class="navbar">
         <div class="nav-container">
             <a href="#" class="logo">
-                <div class="logo-icon">M</div>
+                <img src="assets/logo.png" alt="MedicOrder Logo" class="logo-icon-img">
                 <span class="logo-text">MedicOrder</span>
             </a>
             <ul class="nav-links">
@@ -1424,7 +1437,7 @@
             <div class="footer-grid">
                 <div class="footer-brand">
                     <div class="footer-logo">
-                        <div class="footer-logo-icon">M</div>
+                        <img src="assets/logo.png" alt="MedicOrder Logo" class="logo-icon-img">
                         <span class="footer-logo-text">MedicOrder</span>
                     </div>
                     <p>The digital backbone of pharmaceutical wholesale procurement. Making medicine sourcing faster, smarter, and more reliable.</p>
